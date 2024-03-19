@@ -258,6 +258,14 @@ namespace LLMUnity
             AddMessage(playerName, content);
         }
 
+        private void AddSystemMessage(string content)
+        {
+            if (content != null && content.Lenght > 0)
+            {
+                AddMessage("system", content);
+            }
+        }
+
         private void AddAIMessage(string content)
         {
             AddMessage(AIName, content);
@@ -292,6 +300,45 @@ namespace LLMUnity
             return result.tokens;
         }
 
+        public async Task<string> Completions(string question, string systemMessage, Callback<string> callback = null, EmptyCallback completionCallback = null, bool addToHistory = true)
+        {
+            // handle a chat message by the user
+            // call the callback function while the answer is received
+            // call the completionCallback function when the answer is fully received
+            await InitNKeep();
+
+            string json;
+            lock (chatPromptLock) {
+                AddPlayerMessage(question);
+                AddSystemMessage(systemMessage);
+                string prompt = template.ComputePrompt(chat, AIName);
+                json = JsonUtility.ToJson(GenerateRequest(prompt));
+                chat.RemoveAt(chat.Count - 1);
+                chat.RemoveAt(chat.Count - 1);
+            }
+
+            string result;
+            if (stream)
+            {
+                result = await PostRequest<MultiChatResult, string>(json, "completion", MultiChatContent, callback);
+            }
+            else
+            {
+                result = await PostRequest<ChatResult, string>(json, "completion", ChatContent, callback);
+            }
+
+            if (addToHistory)
+            {
+                lock (chatAddLock) {
+
+                    AddPlayerMessage(question);
+                    AddAIMessage(result);
+                }
+            }
+
+            completionCallback?.Invoke();
+            return result;
+        }
         public async Task<string> Chat(string question, Callback<string> callback = null, EmptyCallback completionCallback = null, bool addToHistory = true)
         {
             // handle a chat message by the user
