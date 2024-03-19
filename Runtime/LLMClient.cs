@@ -260,10 +260,7 @@ namespace LLMUnity
 
         private void AddSystemMessage(string content)
         {
-            if (content != null && content.Lenght > 0)
-            {
-                AddMessage("system", content);
-            }
+            AddMessage("system", content);
         }
 
         private void AddAIMessage(string content)
