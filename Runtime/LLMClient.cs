@@ -93,7 +93,7 @@ namespace LLMUnity
         static object chatPromptLock = new object();
         static object chatAddLock = new object();
 
-        public void Awake()
+        public void Init()
         {
             InitGrammar();
             InitPrompt();

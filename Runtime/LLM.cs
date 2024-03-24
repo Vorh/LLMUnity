@@ -173,12 +173,12 @@ namespace LLMUnity
             }
         }
 
-        new public async void Awake()
+        public async void Init()
         {
             if (killExistingServersOnStart) KillServersAfterUnityCrash();
             if (asynchronousStartup) await StartLLMServer();
             else _ = StartLLMServer();
-            base.Awake();
+            base.Init();
         }
 
         private string SelectApeBinary()
