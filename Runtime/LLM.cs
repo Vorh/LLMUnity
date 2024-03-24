@@ -11,6 +11,7 @@ using Debug = UnityEngine.Debug;
 
 namespace LLMUnity
 {
+
     [DefaultExecutionOrder(-2)]
     public class LLM : LLMClient
     {

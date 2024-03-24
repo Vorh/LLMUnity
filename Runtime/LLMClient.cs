@@ -41,8 +41,18 @@ namespace LLMUnity
     public class ModelAddonAdvancedAttribute : PropertyAttribute {}
     public class ModelExpertAttribute : PropertyAttribute {}
 
+    public interface LLMService
+    {
+        public Task<string> Completions(string question, string systemMessage, Callback<string> callback = null,
+            EmptyCallback completionCallback = null, bool addToHistory = true);
+
+        public void SetPrompt(string newPrompt, bool clearChat = true);
+        public void SetPlayerName(string value);
+        public void SetAIName(string value);
+    }
+
     [DefaultExecutionOrder(-1)]
-    public class LLMClient : MonoBehaviour
+    public class LLMClient : MonoBehaviour, LLMService
     {
         [HideInInspector] public bool advancedOptions = false;
         [HideInInspector] public bool expertOptions = false;
@@ -171,6 +181,16 @@ namespace LLMUnity
             nKeep = -1;
             InitPrompt(clearChat);
             _ = InitNKeep();
+        }
+
+        public void SetPlayerName(string value)
+        {
+            playerName = value;
+        }
+
+        public void SetAIName(string value)
+        {
+            AIName = value;
         }
 
         private async Task InitNKeep()
