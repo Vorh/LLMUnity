@@ -62,10 +62,10 @@ namespace LLMUnity
         [Server] public bool stream = true;
 
         [ModelAddonAdvanced] public string grammar = null;
-        [ModelAdvanced] public int seed = 0;
+        [ModelAdvanced] public int seed = -1;
         [ModelAdvanced] public int numPredict = 256;
-        [ModelAdvanced] public bool cachePrompt = true;
-        [ModelAdvanced, Float(0f, 2f)] public float temperature = 0.2f;
+        [ModelAdvanced] public bool cachePrompt = false;
+        [ModelAdvanced, Float(0f, 2f)] public float temperature = 2f;
         [ModelAdvanced, Int(-1, 100)] public int topK = 40;
         [ModelAdvanced, Float(0f, 1f)] public float topP = 0.9f;
         [ModelAdvanced, Float(0f, 1f)] public float minP = 0.05f;
